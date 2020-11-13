@@ -1,4 +1,5 @@
 """Pandas public API"""
+from datetime import datetime
 from pathlib import Path
 from typing import (
     IO,
@@ -28,10 +29,12 @@ from .core.arrays.integer import UInt8Dtype as UInt8Dtype
 from .core.arrays.integer import UInt16Dtype as UInt16Dtype
 from .core.arrays.integer import UInt32Dtype as UInt32Dtype
 from .core.arrays.integer import UInt64Dtype as UInt64Dtype
+from .core.arrays.base import ExtensionArray
 from .core.frame import DataFrame as DataFrame
 from .core.frame import _AxisType, _ListLike
 from .core.indexes import Index as Index
 from .core.indexes import MultiIndex as MultiIndex
+from .core.indexes import DatetimeIndex
 from .core.series import Series as Series
 
 def concat(
@@ -161,3 +164,52 @@ def to_numeric(
     downcast: Literal["integer", "signed", "unsigned", "float"] = ...,
 ) -> Union[Series, _np.ndarray]: ...
 def unique(values: Series) -> _np.ndarray: ...
+
+_AnyArrayLike = TypeVar("_AnyArrayLike", ExtensionArray, Index, Series, _np.ndarray)
+_ArrayLike = TypeVar("_ArrayLike", ExtensionArray, _np.ndarray)
+ArrayConvertible = Union[List, Tuple, _ArrayLike, "Series"]
+Scalar = Union[int, float, str]
+_DatetimeScalar = TypeVar("_DatetimeScalar", Scalar, datetime)
+DatetimeScalarOrArrayConvertible = Union[_DatetimeScalar, ArrayConvertible]
+@overload
+def to_datetime(
+    arg: _DatetimeScalar,
+    errors: str = ...,
+    dayfirst: bool = ...,
+    yearfirst: bool = ...,
+    utc: Optional[bool] = ...,
+    format: Optional[str] = ...,
+    exact: bool = ...,
+    unit: Optional[str] = ...,
+    infer_datetime_format: bool = ...,
+    origin: str = ...,
+    cache: bool = ...,
+) -> _DatetimeScalar: ...
+@overload
+def to_datetime(
+    arg: "Series",
+    errors: str = ...,
+    dayfirst: bool = ...,
+    yearfirst: bool = ...,
+    utc: Optional[bool] = ...,
+    format: Optional[str] = ...,
+    exact: bool = ...,
+    unit: Optional[str] = ...,
+    infer_datetime_format: bool = ...,
+    origin: str = ...,
+    cache: bool = ...,
+) -> Series: ...
+@overload
+def to_datetime(
+    arg: Union[List, Tuple],
+    errors: str = ...,
+    dayfirst: bool = ...,
+    yearfirst: bool = ...,
+    utc: Optional[bool] = ...,
+    format: Optional[str] = ...,
+    exact: bool = ...,
+    unit: Optional[str] = ...,
+    infer_datetime_format: bool = ...,
+    origin: str = ...,
+    cache: bool = ...,
+) -> DatetimeIndex: ...

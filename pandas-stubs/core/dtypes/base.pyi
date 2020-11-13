@@ -66,10 +66,7 @@ class _ExtensionArray:
     def __eq__(self, other: Any) -> _ArrayLike: ...  # type: ignore
     def __ne__(self, other: Any) -> _ArrayLike: ...  # type: ignore
     def to_numpy(
-        self,
-        dtype: Optional[_DtypeObj] = ...,
-        copy: bool = ...,
-        na_value: Optional[Any] = ...,
+        self, dtype: Optional[_DtypeObj] = ..., copy: bool = ..., na_value: Optional[Any] = ...,
     ) -> np.ndarray: ...
     @property
     def dtype(self) -> _DtypeObj: ...

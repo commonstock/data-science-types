@@ -1,0 +1,3 @@
+from .base import Index
+
+class ExtensionIndex(Index): ...

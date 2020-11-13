@@ -8,3 +8,5 @@ from .arrays.integer import (
     UInt32Dtype,
     UInt64Dtype,
 )
+
+from .tools.datetimes import to_datetime

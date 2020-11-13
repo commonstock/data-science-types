@@ -19,8 +19,7 @@ class _IntegerDtype(BaseMaskedDtype):
     def construct_array_type(cls) -> Type[IntegerArray]: ...
     def _get_common_dtype(self, dtypes: List[_DtypeObj]) -> Optional[_DtypeObj]: ...
     def __from_arrow__(
-        self,
-        array: Any,  # Union[pyarrow.Array, pyarrow.ChunkedArray]
+        self, array: Any,  # Union[pyarrow.Array, pyarrow.ChunkedArray]
     ) -> IntegerArray: ...
 
 class IntegerArray(BaseMaskedArray):

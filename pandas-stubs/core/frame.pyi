@@ -17,6 +17,7 @@ from typing import (
     Tuple,
     Type,
     Union,
+    Set,
     overload,
 )
 
@@ -37,7 +38,7 @@ _ErrorType = Literal["raise", "ignore"]
 
 _ListLike = Union[Series, Index, _np.ndarray, Sequence]
 
-_ColSubsetType = Union[Series, DataFrame, List[_str], _str, _np.ndarray[_np.str_]]
+_ColSubsetType = Union[Series, DataFrame, Tuple[_str, ...], List[_str], Set[_str], _str, _np.ndarray[_np.str_]]
 
 _FunctionLike = Union[_str, Callable]
 
@@ -143,7 +144,7 @@ class DataFrame:
     def drop(self, *, index: Union[List[_str], Index]) -> DataFrame: ...
     @overload
     def drop(self, *, columns: Union[_str, List[_str], Index]) -> DataFrame: ...
-    def drop_duplicates(self, keep: Union[_str, bool] = ...) -> DataFrame: ...
+    def drop_duplicates(self, subset: Optional[Union[Hashable, Sequence[Hashable]]]=..., keep: Union[_str, bool] = ..., inplace: bool=..., ignore_index: bool=...) -> DataFrame: ...
     def transpose(self, *args: int, copy: bool = ...) -> DataFrame: ...
     @overload
     def dropna(
@@ -178,11 +179,7 @@ class DataFrame:
         downcast: Dict = ...,
     ) -> None: ...
     @overload
-    def filter(
-        self,
-        items: List[_str],
-        axis: _AxisType = ...,
-    ) -> DataFrame: ...
+    def filter(self, items: List[_str], axis: _AxisType = ...,) -> DataFrame: ...
     @overload
     def filter(self, *, like: _str, axis: _AxisType = ...) -> DataFrame: ...
     @overload
@@ -311,7 +308,14 @@ class DataFrame:
     def sample(self, n: int, random_state: int = ..., axis: _AxisType = ...) -> DataFrame: ...
     @overload
     def sample(self, axis: _str, frac: float) -> DataFrame: ...
-    def set_index(self, index: Union[_str, List[_str]]) -> DataFrame: ...
+    def set_index(
+        self,
+        keys: Union[_str, Series, Index, Iterator],
+        drop: bool = ...,
+        append: bool = ...,
+        inplace: bool = ...,
+        verify_integrity: bool = ...,
+    ) -> DataFrame: ...
     def sort_index(
         self,
         axis: _AxisType = ...,
@@ -419,6 +423,8 @@ class DataFrame:
     def where(self, cond: Union[Series, DataFrame, _np.ndarray]) -> DataFrame: ...
     @property
     def at(self) -> _AtIndexerFrame: ...
+    @classmethod
+    def from_records(cls, data: Union[Tuple[...], Dict[...], List[...], DataFrame, _np.ndarray], index: Optional[Union[_str, List[_str], Tuple[_str], _ListLike]]=..., exclude: Optional[_ColSubsetType]=..., columns: Optional[_ColSubsetType]=..., coerce_float: bool=..., nrows: Optional[int]=...) -> DataFrame: ...
 
 # Local Variables:
 # blacken-line-length: 100
